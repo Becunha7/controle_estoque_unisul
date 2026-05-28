@@ -64,4 +64,29 @@ public class CategoriaDAO {
         }
         return categorias;
     }
+     public void atualizar(Categoria categoria) {
+        Connection con = Conexao.getConnection(); 
+        PreparedStatement stmt = null;
+        
+       
+        String sql = "UPDATE categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE id = ?";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, categoria.getNome());
+            
+            
+            stmt.setString(2, categoria.getTamanho().name().toUpperCase());
+            stmt.setString(3, categoria.getEmbalagem().name().toUpperCase());
+            stmt.setInt(4, categoria.getIdCategoria());
+
+            stmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Categoria atualizada!");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar: " + ex.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt); 
+        }
+    }
+
 }
