@@ -2,6 +2,6 @@
 package modelo;
 
 
-public class Movimentação {
+public class Movimentaçao {
     
 }
