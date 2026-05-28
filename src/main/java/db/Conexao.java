@@ -3,7 +3,6 @@ package db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Conexao {
@@ -40,18 +39,4 @@ public class Conexao {
             System.out.println("Erro ao fechar conexão: " + ex.getMessage());
         }
     }
-
-public static void closeConnection(Connection con, PreparedStatement stmt, ResultSet rs) {
-    try {
-        if (rs != null) {
-            rs.close();
-        }
-    } catch (SQLException ex) {
-        System.out.println("Erro ao fechar ResultSet: " + ex.getMessage());
-    }
-    // Reaproveita o método que você já tem para fechar o resto!
-    closeConnection(con, stmt); 
-}
-
-    
 }
