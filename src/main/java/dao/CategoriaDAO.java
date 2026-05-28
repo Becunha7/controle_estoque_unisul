@@ -88,5 +88,23 @@ public class CategoriaDAO {
             Conexao.closeConnection(con, stmt); 
         }
     }
+ public void excluir(int id) {
+        Connection con = Conexao.getConnection();
+        PreparedStatement stmt = null;
+        
+        
+        String sql = "DELETE FROM categoria WHERE id = ?";
 
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, id);
+
+            stmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Categoria excluída!");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao excluir (verifique se há produtos nela): " + ex.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt); 
+        }
+    }
 }
