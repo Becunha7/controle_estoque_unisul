@@ -71,7 +71,8 @@ try {
         
     
         java.sql.Connection conn = db.ConexaoMySQL.getConexao(); 
-        java.sql.PreparedStatement stmt = conn.prepareStatement("UPDATE produto SET preco_unitario = preco_unitario * ?");
+        java.sql.PreparedStatement stmt;
+        stmt = conn.prepareStatement("UPDATE produto SET preco = preco * ?");
         stmt.setDouble(1, fator);
         stmt.executeUpdate();
         

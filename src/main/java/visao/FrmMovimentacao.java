@@ -13,12 +13,12 @@ import java.sql.SQLException;
  */
 public class FrmMovimentacao extends javax.swing.JPanel implements java.beans.Customizer {
     
-    /**
-     * Creates new customizer FrmMovimentacao
-     */
-    public FrmMovimentacao() {
-        initComponents();
-    }
+  public FrmMovimentacao() {
+    initComponents();
+    // adiciona campo de quantidade manualmente
+    txtQtd.setBounds(10, 80, 120, 25);
+    add(txtQtd);
+}
     
     public void setObject(Object bean) {
     }
@@ -89,38 +89,50 @@ public class FrmMovimentacao extends javax.swing.JPanel implements java.beans.Cu
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBSALVARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSALVARActionPerformed
-try {
-    // 1. Pega o que o usuário digitou na tela
-    String produtoEscolhido = cmbProdutos.getSelectedItem().toString();
-    int qtdDigitada = Integer.parseInt(txtQuantidade.getText());
-    boolean tipoEntrada = rbEntrada.isSelected(); 
+private void jBSALVARActionPerformed(java.awt.event.ActionEvent evt) {
+    try {
+        String produtoNome = cmbProdutos.getSelectedItem().toString();
+        int qtd = Integer.parseInt(txtQtd.getText().trim());
+        String tipo = rbENTRADA.isSelected() ? "ENTRADA" : "SAIDA";
 
-    java.sql.Connection conn = conexao.Conexao.getConexao();
-    
-    if (tipoEntrada) {
-        // Lógica de ENTRADA (Soma no banco)
-        java.sql.PreparedStatement st = conn.prepareStatement("UPDATE produto SET quantidade_estoque = quantidade_estoque + ? WHERE nome = ?");
-        st.setInt(1, qtdDigitada);
-        st.setString(2, produtoEscolhido);
-        st.executeUpdate();
-        
-        // Exibe o alerta de MÁXIMO 
-        javax.swing.JOptionPane.showMessageDialog(null, "Entrada Salva! \n⚠️ ALERTA: Verifique se o estoque não ultrapassou a Quantidade MÁXIMA.");
-        
-    } else {
-        // Lógica de SAÍDA (Subtrai no banco)
-        java.sql.PreparedStatement st = conn.prepareStatement("UPDATE produto SET quantidade_estoque = quantidade_estoque - ? WHERE nome = ?");
-        st.setInt(1, qtdDigitada);
-        st.setString(2, produtoEscolhido);
-        st.executeUpdate();
-        
-        // Exibe o alerta de MÍNIMO
-        javax.swing.JOptionPane.showMessageDialog(null, "Saída Salva! \n⚠️ ALERTA: Verifique se o produto não ficou abaixo da Quantidade MÍNIMA.");
+        // Busca o ID do produto pelo nome
+        java.util.List<modelo.Produto> lista = new dao.ProdutoDAO().listar();
+        int idProduto = -1;
+        modelo.Produto prodSelecionado = null;
+        for (modelo.Produto p : lista) {
+            if (p.getNome().equals(produtoNome)) {
+                idProduto = p.getId();
+                prodSelecionado = p;
+                break;
+            }
+        }
+        if (idProduto == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Produto não encontrado.");
+            return;
+        }
+
+        modelo.Movimentacao mov = new modelo.Movimentacao(idProduto,
+            new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()),
+            qtd, tipo);
+        new dao.MovimentacaoDAO().registrar(mov);
+
+        // Alerta de estoque
+        if ("ENTRADA".equals(tipo) && prodSelecionado != null
+                && (prodSelecionado.getQuantidade() + qtd) > prodSelecionado.getQntdMax()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "⚠️ ATENÇÃO: Estoque acima da quantidade MÁXIMA!");
+        } else if ("SAIDA".equals(tipo) && prodSelecionado != null
+                && (prodSelecionado.getQuantidade() - qtd) < prodSelecionado.getQntdMin()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "⚠️ ATENÇÃO: Estoque abaixo da quantidade MÍNIMA!");
+        }
+
+        carregarProdutos(); // recarrega combo
+    } catch (NumberFormatException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Digite um número válido na quantidade.");
     }
-    
-} catch (HeadlessException | NumberFormatException | SQLException erro) {
-    javax.swing.JOptionPane.showMessageDialog(null, "Ops, deu um erro. Verifique se digitou apenas números na quantidade!");
-}        // TODO add your handling code here:
+}
+
     }//GEN-LAST:event_jBSALVARActionPerformed
 
 
