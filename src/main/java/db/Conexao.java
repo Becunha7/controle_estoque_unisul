@@ -41,7 +41,12 @@ public class Conexao {
         }
     }
 
-    public static void closeConnection(Connection con, PreparedStatement stmt, ResultSet rs) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+   public static void closeConnection(Connection con, PreparedStatement stmt, ResultSet rs) {
+    try {
+        if (rs != null) rs.close();
+        if (stmt != null) stmt.close();
+        if (con != null) con.close();
+    } catch (SQLException ex) {
+        System.out.println("Erro ao fechar conexão: " + ex.getMessage());
     }
-}
+}}
