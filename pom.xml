@@ -16,5 +16,17 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.0.33</version>
         </dependency>
+        <dependency>
+            <groupId>br.com.behaviortest</groupId>
+            <artifactId>behavior-test-api</artifactId>
+            <version>1.0.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.javax0.jamal.jamal-snippet.2.7.0.com.javax0.jamal</groupId>
+            <artifactId>jamal-sql</artifactId>
+            <version>2.7.0</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 </project>

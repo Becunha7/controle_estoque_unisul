@@ -55,9 +55,6 @@ public class FrmMovimentacao extends javax.swing.JPanel implements java.beans.Cu
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(113, 113, 113)
-                        .addComponent(cmbProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(txtQuantidade))
                     .addGroup(layout.createSequentialGroup()
@@ -66,11 +63,16 @@ public class FrmMovimentacao extends javax.swing.JPanel implements java.beans.Cu
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(rbSAÍDA)))
-                .addContainerGap(215, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jBSALVAR)
-                .addGap(61, 61, 61))
+                .addGap(0, 167, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jBSALVAR)
+                        .addGap(61, 61, 61))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(cmbProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(161, 161, 161))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -81,9 +83,9 @@ public class FrmMovimentacao extends javax.swing.JPanel implements java.beans.Cu
                 .addComponent(rbENTRADA)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbSAÍDA)
-                .addGap(1, 1, 1)
+                .addGap(34, 34, 34)
                 .addComponent(cmbProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addComponent(jBSALVAR)
                 .addGap(36, 36, 36))
         );
@@ -96,11 +98,10 @@ try {
     int qtdDigitada = Integer.parseInt(txtQuantidade.getText());
     boolean tipoEntrada = rbEntrada.isSelected(); 
 
-    // 2. Conecta no banco (AJUSTE "conexao.Conexao" PARA A SUA CLASSE DE BANCO)
     java.sql.Connection conn = conexao.Conexao.getConexao();
     
     if (tipoEntrada) {
-        // Lógica Simplificada de ENTRADA (Soma no banco)
+        // Lógica de ENTRADA (Soma no banco)
         java.sql.PreparedStatement st = conn.prepareStatement("UPDATE produto SET quantidade_estoque = quantidade_estoque + ? WHERE nome = ?");
         st.setInt(1, qtdDigitada);
         st.setString(2, produtoEscolhido);
@@ -110,7 +111,7 @@ try {
         javax.swing.JOptionPane.showMessageDialog(null, "Entrada Salva! \n⚠️ ALERTA: Verifique se o estoque não ultrapassou a Quantidade MÁXIMA.");
         
     } else {
-        // Lógica Simplificada de SAÍDA (Subtrai no banco)
+        // Lógica de SAÍDA (Subtrai no banco)
         java.sql.PreparedStatement st = conn.prepareStatement("UPDATE produto SET quantidade_estoque = quantidade_estoque - ? WHERE nome = ?");
         st.setInt(1, qtdDigitada);
         st.setString(2, produtoEscolhido);
