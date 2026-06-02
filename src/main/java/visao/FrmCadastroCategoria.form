@@ -134,7 +134,7 @@
           <StringArray count="3">
             <StringItem index="0" value="PL&#xc1;STICO"/>
             <StringItem index="1" value="VIDRO"/>
-            <StringItem index="2" value="METAL"/>
+            <StringItem index="2" value="LATA"/>
           </StringArray>
         </Property>
       </Properties>
@@ -161,7 +161,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="MATERIAL:"/>
+        <Property name="text" type="java.lang.String" value="EMBALAGEM"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">

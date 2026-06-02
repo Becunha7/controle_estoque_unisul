@@ -60,12 +60,12 @@ public class FrmCadastroCategoria extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLÁSTICO", "VIDRO", "METAL" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLÁSTICO", "VIDRO", "LATA" }));
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MÉDIO", "GRANDE", "PEQUENO" }));
         jComboBox2.addActionListener(this::jComboBox2ActionPerformed);
 
-        jLabel1.setText("MATERIAL:");
+        jLabel1.setText("EMBALAGEM");
 
         jLabel2.setText("TAMANHO:");
 
