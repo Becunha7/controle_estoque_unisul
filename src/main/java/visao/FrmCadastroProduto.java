@@ -4,6 +4,9 @@
  */
 package visao;
 
+import java.awt.HeadlessException;
+import java.sql.SQLException;
+
 /**
  *
  * @author PICHAU
@@ -28,27 +31,57 @@ public class FrmCadastroProduto extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnReajustar = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        btnReajustar.setText("REAJUSTAR PREÇO");
+        btnReajustar.addActionListener(this::btnReajustarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(btnReajustar)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(btnReajustar)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+    private void btnReajustarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReajustarActionPerformed
+try {
+    String input = javax.swing.JOptionPane.showInputDialog(this, "Digite o percentual de reajuste (ex: 10):");
+    if (input != null && !input.isEmpty()) {
+        double percentual = Double.parseDouble(input);
+        double fator = 1.0 + (percentual / 100.0);
+        
+    
+        java.sql.Connection conn = db.ConexaoMySQL.getConexao(); 
+        java.sql.PreparedStatement stmt = conn.prepareStatement("UPDATE produto SET preco_unitario = preco_unitario * ?");
+        stmt.setDouble(1, fator);
+        stmt.executeUpdate();
+        
+        javax.swing.JOptionPane.showMessageDialog(this, "Preços reajustados com sucesso!");
+    }
+} catch (HeadlessException | NumberFormatException | SQLException e) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReajustarActionPerformed
+
+    
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -70,5 +103,6 @@ public class FrmCadastroProduto extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnReajustar;
     // End of variables declaration//GEN-END:variables
 }
