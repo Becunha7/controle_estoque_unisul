@@ -8,14 +8,14 @@ package visao;
  *
  * @author PICHAU
  */
-public class FrmProduto extends javax.swing.JFrame {
+public class FrmCadastroProduto extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmProduto.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmCadastroProduto.class.getName());
 
     /**
      * Creates new form FrmProduto
      */
-    public FrmProduto() {
+    public FrmCadastroProduto() {
         initComponents();
     }
 
@@ -66,7 +66,7 @@ public class FrmProduto extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmProduto().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new FrmCadastroProduto().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
