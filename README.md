@@ -24,8 +24,7 @@ Sistema completo de gestão de estoque desenvolvido em Java com interface gráfi
 - Listar categorias disponíveis
 - Atualizar dados de categorias
 - Excluir categorias
-- Tamanhos: Pequeno, Médio, Grande
-- Embalagens: Lata, Vidro, Plástico
+
 
 #### 3. Movimentações (Entrada/Saída)
 - Registrar entradas de estoque
