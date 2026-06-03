@@ -32,8 +32,3 @@ CREATE TABLE IF NOT EXISTS movimentacao (
     tipo_movimentacao VARCHAR(20) NOT NULL,
     FOREIGN KEY (id_produto) REFERENCES produto(id)
 );
-
--- Índices para melhor desempenho
-CREATE INDEX idx_categoria ON produto(id_categoria);
-CREATE INDEX idx_produto ON movimentacao(id_produto);
-CREATE INDEX idx_data_mov ON movimentacao(data_movimentacao);
