@@ -17,6 +17,15 @@ public class FrmGerenciaMovimentacao extends javax.swing.JFrame {
      */
     public FrmGerenciaMovimentacao() {
         initComponents();
+        configurarTela();
+    }
+
+    private void configurarTela() {
+        setTitle("Gerenciar Movimentação");
+        setResizable(false);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        getContentPane().setBackground(new java.awt.Color(250, 250, 250));
     }
 
     /**

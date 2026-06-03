@@ -17,6 +17,29 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
      */
     public FrmMenuPrincipal() {
         initComponents();
+        configurarTela();
+    }
+
+    private void configurarTela() {
+        setTitle("Controle de Estoque");
+        setResizable(false);
+        setLocationRelativeTo(null);
+        getContentPane().setBackground(new java.awt.Color(245, 245, 245));
+        getRootPane().setBorder(javax.swing.BorderFactory.createEmptyBorder(18, 18, 18, 18));
+
+        JLTitulo.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 20));
+        JLTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        java.awt.Font buttonFont = new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14);
+        JBCadastroCategoria.setFont(buttonFont);
+        JBCadastroProduto.setFont(buttonFont);
+        JBCadastroMovimentacao.setFont(buttonFont);
+        JBGerenciaCategoria.setFont(buttonFont);
+        JBGerenciaProduto.setFont(buttonFont);
+        JBGerenciaMovimentacao.setFont(buttonFont);
+        JBRelatorios.setFont(buttonFont);
+
+        JBRelatorios.setToolTipText("Visualizar relatórios do estoque");
     }
 
     /**

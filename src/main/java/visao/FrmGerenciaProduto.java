@@ -4,19 +4,97 @@
  */
 package visao;
 
+import dao.ProdutoDAO;
+import java.awt.Font;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import modelo.Produto;
+
 /**
  *
  * @author PICHAU
  */
 public class FrmGerenciaProduto extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmGerenciaProduto.class.getName());
+
+    private final ProdutoDAO produtoDAO = new ProdutoDAO();
 
     /**
      * Creates new form FrmGerenciaProduto
      */
     public FrmGerenciaProduto() {
         initComponents();
+        configurarTela();
+        carregarTabela();
+    }
+
+    private void configurarTela() {
+        setTitle("Gerenciar Produto");
+        setResizable(false);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        getContentPane().setBackground(new java.awt.Color(250, 250, 250));
+        getRootPane().setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        JBEditar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JBExcluir.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JBNovo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JBAtualizar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        tabelaProdutos.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    }
+
+    private void carregarTabela() {
+        List<Produto> produtos = produtoDAO.listar();
+        DefaultTableModel model = new DefaultTableModel(new Object[] {"ID", "Nome", "Categoria", "Unidade", "Preço", "Quantidade", "Mínimo", "Máximo"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        for (Produto produto : produtos) {
+            model.addRow(new Object[] {
+                produto.getId(),
+                produto.getNome(),
+                produto.getNome_categoria(),
+                produto.getUnidade(),
+                String.format("%.2f", produto.getPreco()),
+                produto.getQuantidade(),
+                produto.getQntdMin(),
+                produto.getQntdMax()
+            });
+        }
+        tabelaProdutos.setModel(model);
+    }
+
+    private void editarProduto() {
+        int linha = tabelaProdutos.getSelectedRow();
+        if (linha < 0) {
+            JOptionPane.showMessageDialog(this, "Selecione um produto para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int id = (int) tabelaProdutos.getValueAt(linha, 0);
+        Produto produto = produtoDAO.buscarPorId(id);
+        if (produto != null) {
+            FrmCadastroProduto tela = new FrmCadastroProduto(produto);
+            tela.setVisible(true);
+        }
+    }
+
+    private void excluirProduto() {
+        int linha = tabelaProdutos.getSelectedRow();
+        if (linha < 0) {
+            JOptionPane.showMessageDialog(this, "Selecione um produto para excluir.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int id = (int) tabelaProdutos.getValueAt(linha, 0);
+        int confirmacao = JOptionPane.showConfirmDialog(this, "Deseja excluir este produto?", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+        if (confirmacao == JOptionPane.YES_OPTION) {
+            produtoDAO.excluir(id);
+            carregarTabela();
+        }
     }
 
     /**
@@ -28,31 +106,102 @@ public class FrmGerenciaProduto extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelaProdutos = new javax.swing.JTable();
+        JBNovo = new javax.swing.JButton();
+        JBEditar = new javax.swing.JButton();
+        JBExcluir = new javax.swing.JButton();
+        JBAtualizar = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jLabel1.setText("Gerenciar Produtos");
+
+        tabelaProdutos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Nome", "Categoria", "Unidade", "Preço", "Quantidade", "Mínimo", "Máximo"
+            }
+        ));
+        tabelaProdutos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tabelaProdutos);
+
+        JBNovo.setText("Novo");
+        JBNovo.addActionListener(this::JBNovoActionPerformed);
+
+        JBEditar.setText("Editar");
+        JBEditar.addActionListener(this::JBEditarActionPerformed);
+
+        JBExcluir.setText("Excluir");
+        JBExcluir.addActionListener(this::JBExcluirActionPerformed);
+
+        JBAtualizar.setText("Atualizar");
+        JBAtualizar.addActionListener(this::JBAtualizarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(JBNovo)
+                        .addGap(18, 18, 18)
+                        .addComponent(JBEditar)
+                        .addGap(18, 18, 18)
+                        .addComponent(JBExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(JBAtualizar)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(140, 140, 140))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JBNovo)
+                    .addComponent(JBEditar)
+                    .addComponent(JBExcluir)
+                    .addComponent(JBAtualizar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void JBNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBNovoActionPerformed
+        new FrmCadastroProduto().setVisible(true);
+    }//GEN-LAST:event_JBNovoActionPerformed
+
+    private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
+        editarProduto();
+    }//GEN-LAST:event_JBEditarActionPerformed
+
+    private void JBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBExcluirActionPerformed
+        excluirProduto();
+    }//GEN-LAST:event_JBExcluirActionPerformed
+
+    private void JBAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAtualizarActionPerformed
+        carregarTabela();
+    }//GEN-LAST:event_JBAtualizarActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -63,12 +212,17 @@ public class FrmGerenciaProduto extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FrmGerenciaProduto().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton JBAtualizar;
+    private javax.swing.JButton JBEditar;
+    private javax.swing.JButton JBExcluir;
+    private javax.swing.JButton JBNovo;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tabelaProdutos;
     // End of variables declaration//GEN-END:variables
 }

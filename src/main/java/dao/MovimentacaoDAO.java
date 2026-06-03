@@ -1,6 +1,4 @@
-
 package dao;
-
 
 import db.Conexao;
 import java.sql.Connection;
@@ -14,14 +12,12 @@ import modelo.Movimentacao;
 
 public class MovimentacaoDAO {
 
-    /**
-     * Registra uma movimentação (entrada ou saída) e atualiza o estoque do produto.
-     * Tipo deve ser "ENTRADA" ou "SAIDA".
-     */
     public void registrar(Movimentacao mov) {
         Connection con = Conexao.getConnection();
         PreparedStatement stmtMov = null;
         PreparedStatement stmtProd = null;
+        PreparedStatement stmtConsulta = null;
+        ResultSet rsConsulta = null;
 
         String sqlMov = "INSERT INTO movimentacao (id_produto, data_movimentacao, qntd_movimentada, tipo_movimentacao) "
                       + "VALUES (?, ?, ?, ?)";
@@ -35,6 +31,18 @@ public class MovimentacaoDAO {
 
         try {
             con.setAutoCommit(false);
+
+            if ("SAIDA".equalsIgnoreCase(mov.getTipoMovimentacao())) {
+                String sqlVerifica = "SELECT quantidade FROM produto WHERE id = ?";
+                stmtConsulta = con.prepareStatement(sqlVerifica);
+                stmtConsulta.setInt(1, mov.getId_produto());
+                rsConsulta = stmtConsulta.executeQuery();
+                if (rsConsulta.next() && rsConsulta.getInt("quantidade") < mov.getQntdMovimentada()) {
+                    JOptionPane.showMessageDialog(null, "Quantidade insuficiente em estoque para essa saída.");
+                    con.rollback();
+                    return;
+                }
+            }
 
             stmtMov = con.prepareStatement(sqlMov);
             stmtMov.setInt(1, mov.getId_produto());
@@ -59,6 +67,8 @@ public class MovimentacaoDAO {
             JOptionPane.showMessageDialog(null, "Erro ao registrar movimentação: " + ex.getMessage());
         } finally {
             try {
+                if (rsConsulta != null) rsConsulta.close();
+                if (stmtConsulta != null) stmtConsulta.close();
                 if (stmtProd != null) stmtProd.close();
                 if (stmtMov != null) stmtMov.close();
                 if (con != null) { con.setAutoCommit(true); con.close(); }
@@ -130,5 +140,45 @@ public class MovimentacaoDAO {
             Conexao.closeConnection(con, stmt, rs);
         }
         return lista;
+    }
+
+    public String[] produtoMaisEntradaSaida() {
+        Connection con = Conexao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String[] resultado = new String[2];
+
+        String sqlEntrada = "SELECT p.nome, SUM(m.qntd_movimentada) AS total_entrada "
+                          + "FROM movimentacao m "
+                          + "JOIN produto p ON m.id_produto = p.id "
+                          + "WHERE m.tipo_movimentacao = 'ENTRADA' "
+                          + "GROUP BY m.id_produto, p.nome "
+                          + "ORDER BY total_entrada DESC LIMIT 1";
+        String sqlSaida = "SELECT p.nome, SUM(m.qntd_movimentada) AS total_saida "
+                         + "FROM movimentacao m "
+                         + "JOIN produto p ON m.id_produto = p.id "
+                         + "WHERE m.tipo_movimentacao = 'SAIDA' "
+                         + "GROUP BY m.id_produto, p.nome "
+                         + "ORDER BY total_saida DESC LIMIT 1";
+        try {
+            stmt = con.prepareStatement(sqlEntrada);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                resultado[0] = rs.getString("nome");
+            }
+            rs.close();
+            stmt.close();
+
+            stmt = con.prepareStatement(sqlSaida);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                resultado[1] = rs.getString("nome");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao buscar produto mais movimentado: " + ex.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt, rs);
+        }
+        return resultado;
     }
 }

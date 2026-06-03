@@ -4,6 +4,14 @@
  */
 package visao;
 
+import dao.CategoriaDAO;
+import enums.Embalagens;
+import enums.Tamanhos;
+import java.awt.Font;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import modelo.Categoria;
+
 /**
  *
  * @author BeCunha7
@@ -12,11 +20,100 @@ public class FrmCadastroCategoria extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmCadastroCategoria.class.getName());
 
+    private final CategoriaDAO dao = new CategoriaDAO();
+    private int categoriaId = -1;
+
     /**
      * Creates new form FrmCadastroCategoria
      */
     public FrmCadastroCategoria() {
         initComponents();
+        configurarTela();
+        popularCombos();
+    }
+
+    public FrmCadastroCategoria(Categoria categoria) {
+        initComponents();
+        configurarTela();
+        popularCombos();
+        carregarCategoria(categoria);
+    }
+
+    private void configurarTela() {
+        setTitle("Cadastro de Categoria");
+        setResizable(false);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        getContentPane().setBackground(new java.awt.Color(250, 250, 250));
+        getRootPane().setBorder(javax.swing.BorderFactory.createEmptyBorder(18, 18, 18, 18));
+
+        jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        JLNomeCategoria.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JLEmbalagem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JLTamanho.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JTFNomeCategoria.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JTFNomeCategoria.setColumns(24);
+        jComboBox1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        jComboBox2.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+        java.awt.Font buttonFont = new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14);
+        JBSalvar.setFont(buttonFont);
+        JBLimpar.setFont(buttonFont);
+        JBFechar.setFont(buttonFont);
+        JBSalvar.setOpaque(true);
+        JBSalvar.setBackground(new java.awt.Color(33, 150, 243));
+        JBSalvar.setForeground(java.awt.Color.WHITE);
+        JBLimpar.setOpaque(true);
+        JBLimpar.setBackground(new java.awt.Color(96, 125, 139));
+        JBLimpar.setForeground(java.awt.Color.WHITE);
+        JBFechar.setOpaque(true);
+        JBFechar.setBackground(new java.awt.Color(244, 67, 54));
+        JBFechar.setForeground(java.awt.Color.WHITE);
+    }
+
+    private void popularCombos() {
+        jComboBox1.setModel(new DefaultComboBoxModel<>(new String[] {"LATA", "VIDRO", "PLASTICO"}));
+        jComboBox2.setModel(new DefaultComboBoxModel<>(new String[] {"PEQUENO", "MÉDIO", "GRANDE"}));
+    }
+
+    private void carregarCategoria(Categoria categoria) {
+        categoriaId = categoria.getIdCategoria();
+        JTFNomeCategoria.setText(categoria.getNome());
+        jComboBox1.setSelectedItem(categoria.getEmbalagem().name());
+        jComboBox2.setSelectedItem(categoria.getTamanho().name());
+        JBSalvar.setText("Atualizar");
+    }
+
+    private void limparCampos() {
+        categoriaId = -1;
+        JTFNomeCategoria.setText("");
+        jComboBox1.setSelectedIndex(0);
+        jComboBox2.setSelectedIndex(0);
+        JTFNomeCategoria.requestFocus();
+        JBSalvar.setText("Salvar");
+    }
+
+    private void salvarCategoria() {
+        String nome = JTFNomeCategoria.getText().trim();
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, insira o nome da categoria!", "Aviso do Sistema", JOptionPane.WARNING_MESSAGE);
+            JTFNomeCategoria.requestFocus();
+            return;
+        }
+
+        Categoria categoria = new Categoria();
+        categoria.setIdCategoria(categoriaId);
+        categoria.setNome(nome);
+        categoria.setEmbalagem(Embalagens.valueOf(jComboBox1.getSelectedItem().toString()));
+        categoria.setTamanho(Tamanhos.valueOf(jComboBox2.getSelectedItem().toString()));
+
+        if (categoriaId <= 0) {
+            dao.cadastrar(categoria);
+        } else {
+            dao.atualizar(categoria);
+        }
+
+        limparCampos();
     }
 
     /**
@@ -39,7 +136,7 @@ public class FrmCadastroCategoria extends javax.swing.JFrame {
         JBLimpar = new javax.swing.JButton();
         JBFechar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Cadastro de Categoria");
 
@@ -47,11 +144,7 @@ public class FrmCadastroCategoria extends javax.swing.JFrame {
 
         JLEmbalagem.setText("Embalagem:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "LATA", "VIDRO", "PLASTICO" }));
-
         JLTamanho.setText("Tamanho:");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PEQUENO", "MÉDIO", "GRANDE" }));
 
         JBSalvar.setText("Salvar");
         JBSalvar.addActionListener(this::JBSalvarActionPerformed);
@@ -125,40 +218,7 @@ public class FrmCadastroCategoria extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalvarActionPerformed
-       if (JTFNomeCategoria.getText().trim().isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this, 
-                "Por favor, insira o nome da categoria!", 
-                "Aviso do Sistema", 
-                javax.swing.JOptionPane.WARNING_MESSAGE);
-        return; // Para a execução aqui
-    }
-
-    // 2. Coleta dos dados digitados/selecionados na tela
-    String nomeCategoria = JTFNomeCategoria.getText();
-    
-    // Pega o item que está selecionado nos ComboBoxes (converte para String)
-    String valorCombo1 = jComboBox1.getSelectedItem().toString();
-    String valorCombo2 = jComboBox2.getSelectedItem().toString();
-
-    // [MOMENTO DE INTEGRAÇÃO]: Onde futuramente você chamará o seu Modelo/DAO
-    // Exemplo: Categoria c = new Categoria(nomeCategoria, valorCombo1, valorCombo2);
-    // dao.salvar(c);
-
-    // 3. Mostra a mensagem de sucesso na tela
-    javax.swing.JOptionPane.showMessageDialog(this, 
-            "Categoria salva com sucesso!", 
-            "Sucesso", 
-            javax.swing.JOptionPane.INFORMATION_MESSAGE);
-
-    // 4. Reseta a tela limpando o texto e voltando os combos para a primeira opção (index 0)
-    JTFNomeCategoria.setText("");
-    jComboBox1.setSelectedIndex(0);
-    jComboBox2.setSelectedIndex(0);
-    
-    // Devolve o cursor piscando para o campo de texto
-    JTFNomeCategoria.requestFocus();
-
-
+        salvarCategoria();
     }//GEN-LAST:event_JBSalvarActionPerformed
 
     private void JBFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBFecharActionPerformed
@@ -166,23 +226,13 @@ public class FrmCadastroCategoria extends javax.swing.JFrame {
     }//GEN-LAST:event_JBFecharActionPerformed
 
     private void JBLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBLimparActionPerformed
-        JTFNomeCategoria.setText("");
-        jComboBox1.setSelectedIndex(0);
-        jComboBox2.setSelectedIndex(0);
-
-        // Coloca o foco do teclado de volta no campo Nome
-        JTFNomeCategoria.requestFocus();
+        limparCampos();
     }//GEN-LAST:event_JBLimparActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -193,9 +243,7 @@ public class FrmCadastroCategoria extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FrmCadastroCategoria().setVisible(true));
     }
 

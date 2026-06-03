@@ -4,6 +4,15 @@
  */
 package visao;
 
+import dao.ProdutoDAO;
+import dao.CategoriaDAO;
+import dao.MovimentacaoDAO;
+import modelo.Produto;
+import java.text.DecimalFormat;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author PICHAU
@@ -11,12 +20,28 @@ package visao;
 public class FrmRelatorios extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmRelatorios.class.getName());
+    
+    private ProdutoDAO produtoDAO;
+    private CategoriaDAO categoriaDAO;
+    private MovimentacaoDAO movimentacaoDAO;
 
     /**
      * Creates new form FrmRelatorios
      */
     public FrmRelatorios() {
         initComponents();
+        configurarTela();
+        this.produtoDAO = new ProdutoDAO();
+        this.categoriaDAO = new CategoriaDAO();
+        this.movimentacaoDAO = new MovimentacaoDAO();
+    }
+
+    private void configurarTela() {
+        setTitle("Relatórios do Estoque");
+        setResizable(false);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        getContentPane().setBackground(new java.awt.Color(250, 250, 250));
     }
 
     /**
@@ -28,21 +53,241 @@ public class FrmRelatorios extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        btnListaPrecos = new javax.swing.JButton();
+        btnBalancoFinanceiro = new javax.swing.JButton();
+        btnProdutosMinimo = new javax.swing.JButton();
+        btnProdutosPorCategoria = new javax.swing.JButton();
+        btnProdutosMaisMovimentados = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblRelatorio = new javax.swing.JTable();
+        btnLimpar = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(250, 250, 250));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("Relatórios do Sistema");
+
+        btnListaPrecos.setText("Lista de Preços");
+        btnListaPrecos.addActionListener(evt -> gerarListaPrecos());
+
+        btnBalancoFinanceiro.setText("Balanço Financeiro");
+        btnBalancoFinanceiro.addActionListener(evt -> gerarBalancoFinanceiro());
+
+        btnProdutosMinimo.setText("Produtos Abaixo do Mínimo");
+        btnProdutosMinimo.addActionListener(evt -> gerarProdutosAbaixoMinimo());
+
+        btnProdutosPorCategoria.setText("Produtos por Categoria");
+        btnProdutosPorCategoria.addActionListener(evt -> gerarProdutosPorCategoria());
+
+        btnProdutosMaisMovimentados.setText("Produtos Mais Movimentados");
+        btnProdutosMaisMovimentados.addActionListener(evt -> gerarProdutosMaisMovimentados());
+
+        btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(evt -> limparTabela());
+
+        tblRelatorio.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {},
+            new String [] {}
+        ));
+        jScrollPane1.setViewportView(tblRelatorio);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnListaPrecos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBalancoFinanceiro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnProdutosMinimo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnProdutosPorCategoria)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnProdutosMaisMovimentados))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1200, Short.MAX_VALUE)
+                    .addComponent(btnLimpar))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnListaPrecos)
+                    .addComponent(btnBalancoFinanceiro)
+                    .addComponent(btnProdutosMinimo)
+                    .addComponent(btnProdutosPorCategoria)
+                    .addComponent(btnProdutosMaisMovimentados))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnLimpar)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void gerarListaPrecos() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Produto");
+        modelo.addColumn("Preço Unitário");
+        modelo.addColumn("Unidade");
+        modelo.addColumn("Categoria");
+
+        List<Object[]> dados = produtoDAO.listarPrecos();
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        for (Object[] linha : dados) {
+            modelo.addRow(new Object[] {
+                linha[0],
+                "R$ " + df.format(linha[1]),
+                linha[2],
+                linha[3]
+            });
+        }
+
+        tblRelatorio.setModel(modelo);
+    }
+
+    private void gerarBalancoFinanceiro() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Produto");
+        modelo.addColumn("Unidade");
+        modelo.addColumn("Quantidade");
+        modelo.addColumn("Preço Unitário");
+        modelo.addColumn("Total por Produto");
+
+        List<Object[]> dados = produtoDAO.listarBalancoFinanceiro();
+        DecimalFormat df = new DecimalFormat("0.00");
+        double totalEstoque = 0;
+
+        for (Object[] linha : dados) {
+            double total = (double) linha[4];
+            totalEstoque += total;
+            modelo.addRow(new Object[] {
+                linha[0],
+                linha[1],
+                linha[2],
+                "R$ " + df.format(linha[3]),
+                "R$ " + df.format(total)
+            });
+        }
+
+        Object[] totalRow = new Object[] {
+            "TOTAL DO ESTOQUE",
+            "",
+            "",
+            "",
+            "R$ " + df.format(totalEstoque)
+        };
+        modelo.addRow(totalRow);
+
+        tblRelatorio.setModel(modelo);
+        JOptionPane.showMessageDialog(this, "Valor total do estoque: R$ " + df.format(totalEstoque));
+    }
+
+    private void gerarProdutosAbaixoMinimo() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Produto");
+        modelo.addColumn("Quantidade Mínima");
+        modelo.addColumn("Quantidade em Estoque");
+        modelo.addColumn("Categoria");
+
+        List<Produto> produtos = produtoDAO.listarAbaixoDoMinimo();
+
+        if (produtos.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nenhum produto abaixo da quantidade mínima.");
+        }
+
+        for (Produto p : produtos) {
+            modelo.addRow(new Object[] {
+                p.getNome(),
+                p.getQntdMin(),
+                p.getQuantidade(),
+                p.getNome_categoria()
+            });
+        }
+
+        tblRelatorio.setModel(modelo);
+    }
+
+    private void gerarProdutosPorCategoria() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Categoria");
+        modelo.addColumn("Quantidade de Produtos");
+
+        List<Object[]> dados = categoriaDAO.listarQuantidadeProdutosPorCategoria();
+
+        for (Object[] linha : dados) {
+            modelo.addRow(new Object[] {
+                linha[0],
+                linha[1]
+            });
+        }
+
+        tblRelatorio.setModel(modelo);
+    }
+
+    private void gerarProdutosMaisMovimentados() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Tipo");
+        modelo.addColumn("Produto");
+
+        String[] resultado = movimentacaoDAO.produtoMaisEntradaSaida();
+
+        if (resultado[0] != null) {
+            modelo.addRow(new Object[] {
+                "Mais Entrada",
+                resultado[0]
+            });
+        } else {
+            modelo.addRow(new Object[] {
+                "Mais Entrada",
+                "Sem dados"
+            });
+        }
+
+        if (resultado[1] != null) {
+            modelo.addRow(new Object[] {
+                "Mais Saída",
+                resultado[1]
+            });
+        } else {
+            modelo.addRow(new Object[] {
+                "Mais Saída",
+                "Sem dados"
+            });
+        }
+
+        tblRelatorio.setModel(modelo);
+    }
+
+    private void limparTabela() {
+        tblRelatorio.setModel(new DefaultTableModel());
+    }
 
     /**
      * @param args the command line arguments
@@ -70,5 +315,15 @@ public class FrmRelatorios extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBalancoFinanceiro;
+    private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnListaPrecos;
+    private javax.swing.JButton btnProdutosMaisMovimentados;
+    private javax.swing.JButton btnProdutosMinimo;
+    private javax.swing.JButton btnProdutosPorCategoria;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblRelatorio;
     // End of variables declaration//GEN-END:variables
 }
