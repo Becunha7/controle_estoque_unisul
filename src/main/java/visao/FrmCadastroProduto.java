@@ -26,7 +26,6 @@ public class FrmCadastroProduto extends javax.swing.JFrame {
     private final CategoriaDAO categoriaDAO = new CategoriaDAO();
     private int produtoId = -1;
     private List<Categoria> categorias = new ArrayList<>();
-    private javax.swing.JLabel JLUnidade;
 
     /**
      * Creates new form FrmCadastroProduto
@@ -51,6 +50,7 @@ public class FrmCadastroProduto extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         getContentPane().setBackground(new java.awt.Color(250, 250, 250));
         getRootPane().setBorder(javax.swing.BorderFactory.createEmptyBorder(18, 18, 18, 18));
+        setMinimumSize(new java.awt.Dimension(420, 430));
 
         jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 18));
         JLNome.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -349,6 +349,7 @@ public class FrmCadastroProduto extends javax.swing.JFrame {
     private javax.swing.JLabel JLNome;
     private javax.swing.JLabel JLPreco;
     private javax.swing.JLabel JLQuantidade;
+    private javax.swing.JLabel JLUnidade;
     private javax.swing.JTextField JTFMaximo;
     private javax.swing.JTextField JTFMinimo;
     private javax.swing.JTextField JTFNome;

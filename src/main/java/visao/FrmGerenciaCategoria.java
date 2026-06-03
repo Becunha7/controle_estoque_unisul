@@ -37,6 +37,7 @@ public class FrmGerenciaCategoria extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         getContentPane().setBackground(new java.awt.Color(250, 250, 250));
         getRootPane().setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setMinimumSize(new java.awt.Dimension(580, 360));
 
         jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 18));
         JBEditar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
