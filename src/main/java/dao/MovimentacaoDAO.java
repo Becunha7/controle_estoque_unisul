@@ -181,4 +181,67 @@ public class MovimentacaoDAO {
         }
         return resultado;
     }
+
+    public void excluir(int id) {
+        Connection con = Conexao.getConnection();
+        PreparedStatement stmtMov = null;
+        PreparedStatement stmtConsulta = null;
+        PreparedStatement stmtProd = null;
+        ResultSet rs = null;
+
+        try {
+            con.setAutoCommit(false);
+
+            // Obter dados da movimentação antes de deletar
+            String sqlConsulta = "SELECT id_produto, qntd_movimentada, tipo_movimentacao FROM movimentacao WHERE id = ?";
+            stmtConsulta = con.prepareStatement(sqlConsulta);
+            stmtConsulta.setInt(1, id);
+            rs = stmtConsulta.executeQuery();
+
+            if (rs.next()) {
+                int idProduto = rs.getInt("id_produto");
+                int quantidade = rs.getInt("qntd_movimentada");
+                String tipo = rs.getString("tipo_movimentacao");
+
+                // Reverter a movimentação no estoque
+                String sqlUpdate;
+                if ("ENTRADA".equalsIgnoreCase(tipo)) {
+                    sqlUpdate = "UPDATE produto SET quantidade = quantidade - ? WHERE id = ?";
+                } else {
+                    sqlUpdate = "UPDATE produto SET quantidade = quantidade + ? WHERE id = ?";
+                }
+
+                stmtProd = con.prepareStatement(sqlUpdate);
+                stmtProd.setInt(1, quantidade);
+                stmtProd.setInt(2, idProduto);
+                stmtProd.executeUpdate();
+
+                // Deletar a movimentação
+                String sqlDelete = "DELETE FROM movimentacao WHERE id = ?";
+                stmtMov = con.prepareStatement(sqlDelete);
+                stmtMov.setInt(1, id);
+                stmtMov.executeUpdate();
+
+                con.commit();
+                JOptionPane.showMessageDialog(null, "Movimentação excluída com sucesso!");
+            }
+        } catch (SQLException ex) {
+            try {
+                if (con != null) con.rollback();
+            } catch (SQLException rollbackEx) {
+                System.out.println("Erro ao fazer rollback: " + rollbackEx.getMessage());
+            }
+            JOptionPane.showMessageDialog(null, "Erro ao excluir movimentação: " + ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmtConsulta != null) stmtConsulta.close();
+                if (stmtProd != null) stmtProd.close();
+                if (stmtMov != null) stmtMov.close();
+                if (con != null) { con.setAutoCommit(true); con.close(); }
+            } catch (SQLException ex) {
+                System.out.println("Erro ao fechar conexão: " + ex.getMessage());
+            }
+        }
+    }
 }

@@ -43,7 +43,8 @@ public class FrmCadastroMovimentacao extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         getContentPane().setBackground(new java.awt.Color(250, 250, 250));
         getRootPane().setBorder(javax.swing.BorderFactory.createEmptyBorder(18, 18, 18, 18));
-        setMinimumSize(new java.awt.Dimension(430, 320));
+        setMinimumSize(new java.awt.Dimension(450, 360));
+        setPreferredSize(new java.awt.Dimension(450, 360));
 
         jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 18));
         JLCProduto.setFont(new Font("Segoe UI", Font.PLAIN, 14));

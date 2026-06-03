@@ -50,7 +50,8 @@ public class FrmCadastroProduto extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         getContentPane().setBackground(new java.awt.Color(250, 250, 250));
         getRootPane().setBorder(javax.swing.BorderFactory.createEmptyBorder(18, 18, 18, 18));
-        setMinimumSize(new java.awt.Dimension(420, 430));
+        setMinimumSize(new java.awt.Dimension(470, 480));
+        setPreferredSize(new java.awt.Dimension(470, 480));
 
         jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 18));
         JLNome.setFont(new Font("Segoe UI", Font.PLAIN, 14));
