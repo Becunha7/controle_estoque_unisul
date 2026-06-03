@@ -9,7 +9,7 @@ package visao;
  * @author PICHAU
  */
 public class FrmMenuPrincipal extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmMenuPrincipal.class.getName());
 
     /**
@@ -28,24 +28,27 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        JLTitulo = new javax.swing.JLabel();
         JBCadastroCategoria = new javax.swing.JButton();
         JBCadastroMovimentacao = new javax.swing.JButton();
         JBCadastroProduto = new javax.swing.JButton();
         JBGerenciaCategoria = new javax.swing.JButton();
         JBGerenciaProduto = new javax.swing.JButton();
         JBGerenciaMovimentacao = new javax.swing.JButton();
+        JBRelatorios = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Controle de Estoque");
+        JLTitulo.setText("Controle de Estoque");
 
         JBCadastroCategoria.setText("Cadastrar Categoria");
         JBCadastroCategoria.addActionListener(this::JBCadastroCategoriaActionPerformed);
 
         JBCadastroMovimentacao.setText("Cadastrar Movimentação");
+        JBCadastroMovimentacao.addActionListener(this::JBCadastroMovimentacaoActionPerformed);
 
         JBCadastroProduto.setText("Cadastrar Produto");
+        JBCadastroProduto.addActionListener(this::JBCadastroProdutoActionPerformed);
 
         JBGerenciaCategoria.setText("Gerenciar Categoria");
         JBGerenciaCategoria.addActionListener(this::JBGerenciaCategoriaActionPerformed);
@@ -54,6 +57,10 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         JBGerenciaProduto.addActionListener(this::JBGerenciaProdutoActionPerformed);
 
         JBGerenciaMovimentacao.setText("Gerenciar Movimentação");
+        JBGerenciaMovimentacao.addActionListener(this::JBGerenciaMovimentacaoActionPerformed);
+
+        JBRelatorios.setText("Relatórios");
+        JBRelatorios.addActionListener(this::JBRelatoriosActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,7 +74,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(50, 50, 50)
-                        .addComponent(jLabel1)
+                        .addComponent(JLTitulo)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
@@ -85,12 +92,16 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(JBCadastroProduto)
                                 .addGap(239, 239, 239))))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(208, 208, 208)
+                .addComponent(JBRelatorios)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(JLTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JBCadastroCategoria)
@@ -101,23 +112,44 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                     .addComponent(JBGerenciaCategoria)
                     .addComponent(JBGerenciaProduto)
                     .addComponent(JBGerenciaMovimentacao))
-                .addContainerGap(202, Short.MAX_VALUE))
+                .addGap(40, 40, 40)
+                .addComponent(JBRelatorios)
+                .addContainerGap(139, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBCadastroCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastroCategoriaActionPerformed
-        // TODO add your handling code here:
+        FrmCadastroCategoria telaCadastroCategoria = new FrmCadastroCategoria();
+        telaCadastroCategoria.setVisible(true);
     }//GEN-LAST:event_JBCadastroCategoriaActionPerformed
 
     private void JBGerenciaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBGerenciaCategoriaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JBGerenciaCategoriaActionPerformed
+        FrmGerenciaCategoria telaCategoria = new FrmGerenciaCategoria();
+        telaCategoria.setVisible(true);    }//GEN-LAST:event_JBGerenciaCategoriaActionPerformed
 
     private void JBGerenciaProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBGerenciaProdutoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JBGerenciaProdutoActionPerformed
+        FrmGerenciaProduto telaProduto = new FrmGerenciaProduto();
+        telaProduto.setVisible(true);     }//GEN-LAST:event_JBGerenciaProdutoActionPerformed
+
+    private void JBCadastroProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastroProdutoActionPerformed
+        FrmCadastroProduto telaCadastroProduto = new FrmCadastroProduto();
+        telaCadastroProduto.setVisible(true);    }//GEN-LAST:event_JBCadastroProdutoActionPerformed
+
+    private void JBCadastroMovimentacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastroMovimentacaoActionPerformed
+        FrmCadastroMovimentacao telaCadastroMovimentacao = new FrmCadastroMovimentacao();
+        telaCadastroMovimentacao.setVisible(true);
+    }//GEN-LAST:event_JBCadastroMovimentacaoActionPerformed
+
+    private void JBGerenciaMovimentacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBGerenciaMovimentacaoActionPerformed
+        FrmGerenciaMovimentacao telaMovimentacao = new FrmGerenciaMovimentacao();
+        telaMovimentacao.setVisible(true);    }//GEN-LAST:event_JBGerenciaMovimentacaoActionPerformed
+
+    private void JBRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBRelatoriosActionPerformed
+        FrmRelatorios telaRelatorios = new FrmRelatorios();
+        telaRelatorios.setVisible(true);
+    }//GEN-LAST:event_JBRelatoriosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -151,6 +183,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton JBGerenciaCategoria;
     private javax.swing.JButton JBGerenciaMovimentacao;
     private javax.swing.JButton JBGerenciaProduto;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton JBRelatorios;
+    private javax.swing.JLabel JLTitulo;
     // End of variables declaration//GEN-END:variables
 }
