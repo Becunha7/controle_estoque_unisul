@@ -6,10 +6,10 @@ package visao;
 
 /**
  *
- * @author PICHAU
+ * @author BeCunha7
  */
 public class FrmCadastroCategoria extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmCadastroCategoria.class.getName());
 
     /**
@@ -125,21 +125,53 @@ public class FrmCadastroCategoria extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalvarActionPerformed
-        // TODO add your handling code here:
+       if (JTFNomeCategoria.getText().trim().isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, 
+                "Por favor, insira o nome da categoria!", 
+                "Aviso do Sistema", 
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+        return; // Para a execução aqui
+    }
+
+    // 2. Coleta dos dados digitados/selecionados na tela
+    String nomeCategoria = JTFNomeCategoria.getText();
+    
+    // Pega o item que está selecionado nos ComboBoxes (converte para String)
+    String valorCombo1 = jComboBox1.getSelectedItem().toString();
+    String valorCombo2 = jComboBox2.getSelectedItem().toString();
+
+    // [MOMENTO DE INTEGRAÇÃO]: Onde futuramente você chamará o seu Modelo/DAO
+    // Exemplo: Categoria c = new Categoria(nomeCategoria, valorCombo1, valorCombo2);
+    // dao.salvar(c);
+
+    // 3. Mostra a mensagem de sucesso na tela
+    javax.swing.JOptionPane.showMessageDialog(this, 
+            "Categoria salva com sucesso!", 
+            "Sucesso", 
+            javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+    // 4. Reseta a tela limpando o texto e voltando os combos para a primeira opção (index 0)
+    JTFNomeCategoria.setText("");
+    jComboBox1.setSelectedIndex(0);
+    jComboBox2.setSelectedIndex(0);
+    
+    // Devolve o cursor piscando para o campo de texto
+    JTFNomeCategoria.requestFocus();
+
+
     }//GEN-LAST:event_JBSalvarActionPerformed
 
     private void JBFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBFecharActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_JBFecharActionPerformed
 
     private void JBLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBLimparActionPerformed
         JTFNomeCategoria.setText("");
-    txtDescricao.setText("");
-    txtQuantidade.setText("");
-    txtPreco.setText("");
-    
-    // Coloca o foco do teclado de volta no campo Nome
-    txtNome.requestFocus();
+        jComboBox1.setSelectedIndex(0);
+        jComboBox2.setSelectedIndex(0);
+
+        // Coloca o foco do teclado de volta no campo Nome
+        JTFNomeCategoria.requestFocus();
     }//GEN-LAST:event_JBLimparActionPerformed
 
     /**
